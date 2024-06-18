@@ -1,11 +1,12 @@
 import React from "react";
-import { Box } from "@chakra-ui/react";
 import { ChakraProvider, Menu, MenuButton, MenuList, MenuItem, FormControl, FormLabel, Input, Button } from "@chakra-ui/react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import logo from "./logo.svg";
 import "./App.css";
-import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon } from "@chakra-ui/react";
 import { useState } from "react";
+import { Box, Heading, Stack, StackDivider, Text } from "@chakra-ui/react";
+import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react'
+import { SimpleGrid } from '@chakra-ui/react'
 
 const orders = [
   {
@@ -62,51 +63,90 @@ function AnotherPage() {
       <div style={{ width: '60%' }}>
         <PDFViewer src="./The Art and Science of Prompting.pdf" />
       </div>
-      <div style={{ width: '40%' }}>
-        <Accordion allowToggle>
+
+      <div style={{ width: '40%', padding: '20px' }}>
+        <SimpleGrid columns={1} spacing={10}>
           {editedOrders.map((order, index) => (
-            <AccordionItem key={order.orderNumber}>
-              <h2>
-                <AccordionButton>
-                  <Box flex="1" textAlign="left">
-                    {order.itemName}
+            <Card key={index}>
+              <CardHeader>
+                <Heading size='md'>{order.itemName}</Heading>
+              </CardHeader>
+
+              <CardBody>
+                <Stack divider={<StackDivider />} spacing='4'>
+                  <Box>
+                    <Heading size='xs' textTransform='uppercase'>
+                      Description
+                    </Heading>
+                    <Input
+                      value={order.description}
+                      onChange={(event) => handleDescriptionChange(index, event)}
+                    />
                   </Box>
-                  <AccordionIcon />
-                </AccordionButton>
-              </h2>
-              <AccordionPanel pb={4}>
-                <table>
-                  <tr>
-                    <td>Description:</td>
-                    <td>
-                      <input
-                        type="text"
-                        value={order.description}
-                        onChange={(event) => handleDescriptionChange(index, event)}
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Comment:</td>
-                    <td>
-                      <input
-                        type="text"
-                        value={order.comment}
-                        onChange={(event) => handleCommentChange(index, event)}
-                      />
-                    </td>
-                  </tr>
-                </table>
-              </AccordionPanel>
-            </AccordionItem>
+                  <Box>
+                    <Heading size='xs' textTransform='uppercase'>
+                      Comment
+                    </Heading>
+                    <Input
+                      value={order.comment}
+                      onChange={(event) => handleCommentChange(index, event)}
+                    />
+                  </Box>
+                </Stack>
+              </CardBody>
+            </Card>
           ))}
-        </Accordion>
-      </div >
-    </div >
+        </SimpleGrid>
+      </div>
+    </div>
   );
 }
 
 
+
+function Orders({ orders }) {
+  return (
+    <div>
+      {orders.map((order, index) => (
+        <Card key={index}>
+          <CardHeader>
+            <Heading size='md'>{order.title}</Heading>
+          </CardHeader>
+
+          <CardBody>
+            <Stack divider={<StackDivider />} spacing='4'>
+              <Box>
+                <Heading size='xs' textTransform='uppercase'>
+                  Summary
+                </Heading>
+                <Text pt='2' fontSize='sm'>
+                  {order.summary}
+                </Text>
+              </Box>
+              <Box>
+                <Heading size='xs' textTransform='uppercase'>
+                  Overview
+                </Heading>
+                <Text pt='2' fontSize='sm'>
+                  {order.overview}
+                </Text>
+              </Box>
+              <Box>
+                <Heading size='xs' textTransform='uppercase'>
+                  Analysis
+                </Heading>
+                <Text pt='2' fontSize='sm'>
+                  {order.analysis}
+                </Text>
+              </Box>
+            </Stack>
+          </CardBody>
+        </Card>
+      ))}
+
+    </div>
+  );
+}
 
 function PDFViewer({ src }) {
   return (
